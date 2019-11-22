@@ -1,0 +1,47 @@
+<form autocomplete="off" #createForm="ngForm" (ngSubmit)="save()">
+    <h1 mat-dialog-title>{{ "Create" | localize }}</h1>
+    <mat-dialog-content>
+        <div class="row-fluid">
+            <div class="col-md-12">
+
+                <mat-form-field>
+                    <mat-select [placeholder]="l('VoucherPlatform')" [(ngModel)]="platform.voucherPlatformId" name="VoucherPlatform"
+                                matNativeControl required>
+                        <mat-option *ngFor="let voucherPlatform of voucherPlatforms"
+                                    [value]="voucherPlatform.id">
+                            {{voucherPlatform.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput [matDatepicker]="picker1" [placeholder]="'StartDate' | localize"
+                           [formControl]="start" required readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput [matDatepicker]="picker2" [placeholder]="'EndDate' | localize" 
+                           [formControl]="end" required readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+
+
+            </div>
+        </div>
+    </mat-dialog-content>
+    <div mat-dialog-actions>
+        <button mat-button type="button" [disabled]="saving" (click)="close(false)">
+            {{ "Cancel" | localize }}
+        </button>
+        <button mat-flat-button
+                type="submit"
+                flex="15"
+                color="primary"
+                [disabled]="!createForm.form.valid || saving">
+            {{ "Save" | localize }}
+        </button>
+    </div>
+</form>

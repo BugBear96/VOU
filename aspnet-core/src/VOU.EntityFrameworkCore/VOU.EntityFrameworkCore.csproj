@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <RootNamespace>VOU</RootNamespace>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Migrations\20180726102624_Upgrade_ABP_380.cs" />
+    <Compile Remove="Migrations\20180927062408_test.cs" />
+    <Compile Remove="Migrations\20190111071724_Upgraded_To_Abp_v4_1_0.cs" />
+    <Compile Remove="Migrations\20190919115730_AddedTenant_TenantWithSubCategory.cs" />
+    <Compile Remove="Migrations\20190919115730_AddedTenant_TenantWithSubCategory.Designer.cs" />
+    <Compile Remove="Migrations\20190919121606_CorrectTenantWithSubCategory.cs" />
+    <Compile Remove="Migrations\20190919121606_CorrectTenantWithSubCategory.Designer.cs" />
+    <Compile Remove="Migrations\20191011060403_AddedBranchWithVoucherPlatform.cs" />
+    <Compile Remove="Migrations\20191011060403_AddedBranchWithVoucherPlatform.Designer.cs" />
+    <Compile Remove="Migrations\20191011072851_AddedBranchWithVoucherPlatform.cs" />
+    <Compile Remove="Migrations\20191011072851_AddedBranchWithVoucherPlatform.Designer.cs" />
+    <Compile Remove="Migrations\20191115083341_AddedUser_FCMToken_UseType_PrfilePicture.cs" />
+    <Compile Remove="Migrations\20191115083341_AddedUser_FCMToken_UseType_PrfilePicture.Designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VOU.Core\VOU.Core.csproj" />
+  </ItemGroup>
+</Project>

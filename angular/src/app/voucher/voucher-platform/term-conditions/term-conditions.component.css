@@ -1,0 +1,18 @@
+mat-chip {
+    width: 100%;
+    margin-bottom: 5px;
+}
+div.cdk-list {
+    margin-top: 60px;
+}
+.chip-list mat-chip {
+    margin-bottom: 5px;
+}
+
+.right, mat-icon {
+    margin-left: auto;
+}
+
+div.mat-form-field-infix {
+    padding-top: 25px !important;
+}

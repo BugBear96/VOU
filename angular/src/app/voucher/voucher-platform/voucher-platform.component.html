@@ -1,0 +1,116 @@
+<style>
+    
+    .mat-card-image {
+        height: 150px;
+    }
+    button.manage-button {
+        margin-right: 60px;
+        margin-left: 10px;
+    }
+    mat-card-actions {
+        margin-bottom: 0px;
+        padding: 0px;
+    }
+</style>
+
+<div class="row clearfix" [@routerTransition]>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card main-content">
+            <div class="header">
+                <h2>{{ "VoucherPlatform" | localize }}</h2>
+                <ul class="header-dropdown m-r--5">
+                    <li>
+                        <button mat-icon-button
+                                [matMenuTriggerFor]="headerMenu"
+                                class="header-dropdown-mat-icon-button">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #headerMenu="matMenu">
+                            <button mat-menu-item (click)="this.load()">
+                                <mat-icon>refresh</mat-icon>
+                                <span>{{ "Refresh" | localize }}</span>
+                            </button>
+                        </mat-menu>
+                    </li>
+                </ul>
+            </div>
+            <div class="body table-responsive">
+                <!--query start-->
+                <div class="row clearfix">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <mat-form-field>
+                                    <input matInput [placeholder]="l('Filter')" [(ngModel)]="keyword" name="keyword">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-slide-toggle class="example-margin"
+                                                  [(ngModel)]="showArchived"
+                                                  [ngModelOptions]="{standalone: true}">
+                                    Show Archived!
+                                </mat-slide-toggle>
+                            </div>
+                            <div class="col-md-12 text-right p-r-25">
+                                <button mat-raised-button color="primary" (click)="this.load()">{{ 'Search' | localize }}</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!--query end-->
+
+                <div class="row">
+                    <div class="col-md-3" *ngFor="let platform of this.voucherPlatforms">
+                        <mat-card class="example-card ">
+                            <img mat-card-image src="{{this.imgUrl}}/Voucher/GetVoucherPlatformCoverPictureById?id={{platform.coverPictureId ? platform.coverPictureId : 0}}" alt="Photo of a Shiba Inu">
+                            <mat-card-content>
+                                <mat-card-title>{{ platform.name }}</mat-card-title>
+                                <mat-card-subtitle>subtitle</mat-card-subtitle>
+                                <p>
+                                    {{ platform.description }}
+                                </p>
+
+                            </mat-card-content>
+                            <mat-card-actions >
+                                <button mat-button (click)="updateCover(platform)">{{ "UpdateCoverPicture" | localize }}</button>
+                            </mat-card-actions>
+
+                           
+
+                            <mat-card-actions >
+                                <button class="manage-button" mat-icon-button routerLink="/app/voucher-platform/edit/{{platform.id}}" routerLinkActive="active-link">
+
+                                    <mat-icon>edit</mat-icon>
+                                    <span stryle="display: inline-block; ">{{ "Manage" | localize }}</span>
+
+                                </button>
+                                <mat-slide-toggle class=""
+                                              
+                                                  [checked]="platform.archivedTime"
+                                                  
+                                                  (change)="toggleArchived($event, platform)"
+                                                  >
+                                    Archived
+                                </mat-slide-toggle>
+
+                            </mat-card-actions>
+                           
+
+                        </mat-card>
+                    </div>
+                    
+
+
+                </div>
+
+                <button mat-mini-fab *ngIf="createPermission" routerLink="/app/voucher-platform/add"
+                        color="primary"
+                        class="pull-right">
+
+                    <mat-icon>add</mat-icon>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

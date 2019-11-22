@@ -1,0 +1,43 @@
+
+
+<form class="example-form">
+    <!--
+    <label for="file-upload" class="custom-file-upload">
+        <i class="fa fa-cloud-upload"></i> Custom Upload
+    </label>
+    <input id="file-upload" type="file" hidden />
+    -->
+    <input #fileInput type="file" style="margin-bottom: 20px;" (change)="addFile()" />
+
+    <img id="IconPictureResize" style="display: block; margin-top: 20px;" src="" *ngIf="uploadedFile.fileName" />
+
+    <button class="button" mat-raised-button color="primary" (click)="updateProfilePicture()" style="margin-top: 20px;">
+        <mat-icon>add</mat-icon>
+        <span>{{ "UpdatePicture" | localize }}</span>
+    </button>
+
+
+
+</form>
+<!--
+
+<div id="fileInput"></div>
+<script>
+
+    var img = $("#IconPictureResize");
+    var ratio = t.result.height * img.width() / t.result.width;
+    img.height(ratio + "px");
+
+    var url = abp.appPath + "Temp/Downloads/" + t.result.fileName + "?v=" + (new Date()).getTime();
+    vm.uploadedFileName = t.result.fileName;
+
+    if (jcrop) jcrop.data("Jcrop").destroy();
+    img.attr("src", url);
+    jcrop = img.Jcrop({
+        trueSize: [t.result.width, t.result.height],
+        setSelect: [0, 0, t.result.width, t.result.height]
+    })
+
+</script>
+
+    -->

@@ -1,0 +1,82 @@
+<style>
+    .example-card {
+        margin: 5px 10px;
+    }
+</style>
+
+<div class="row clearfix" [@routerTransition]>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card main-content">
+            <div class="header">
+                <h2>{{ "Branch" | localize }}</h2>
+                <ul class="header-dropdown m-r--5">
+                    <li>
+                        <button mat-icon-button
+                                [matMenuTriggerFor]="headerMenu"
+                                class="header-dropdown-mat-icon-button">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #headerMenu="matMenu">
+                            <button mat-menu-item (click)="this.load()">
+                                <mat-icon>refresh</mat-icon>
+                                <span>{{ "Refresh" | localize }}</span>
+                            </button>
+                        </mat-menu>
+                    </li>
+                </ul>
+            </div>
+            <div class="body table-responsive">
+                <!--query start-->
+                <div class="row clearfix">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <mat-form-field>
+                                    <input matInput [placeholder]="l('Filter')" [(ngModel)]="keyword" name="keyword">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-md-2 text-right p-r-25">
+                                <button mat-raised-button color="primary" (click)="this.load()">{{ 'Search' | localize }}</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!--query end-->
+                <div class="row">
+                    <mat-card class="example-card col-md-3" *ngFor="let location of locations">
+                        <img mat-card-image src="{{this.imgUrl}}/Branch/GetCoverPictureById?id={{location.coverPictureId}}" alt="Photo of a Shiba Inu">
+                        <mat-card-content>
+                            <mat-card-title>{{ location.name }}</mat-card-title>
+                            <mat-card-subtitle>subtitle</mat-card-subtitle>
+                            <p>
+                                {{ location.address }}
+                            </p>
+                            <p>
+                                {{ location.postcode }}, {{ location.city.cityName }}, {{ location.state.stateName }}
+                            </p>
+                        </mat-card-content>
+                        <mat-card-actions style="margin-bottom: 0px;">
+                            <button mat-button (click)="edit(location)">Edit</button>
+                        </mat-card-actions>
+                        <mat-card-actions style="margin-bottom: 0px;">
+                            <button mat-button (click)="updateCover(location)">{{ "UpdateCoverPicture" | localize }}</button>
+                        </mat-card-actions>
+                        <mat-card-actions>
+                            <button mat-button routerLink="/app/branch/voucher-platform/{{location.id}}">Manage Voucher Platform</button>
+                        </mat-card-actions>
+                    </mat-card>
+
+                </div>
+                
+
+                <button mat-mini-fab
+                        color="primary"
+                        class="pull-right"
+                        (click)="create()">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

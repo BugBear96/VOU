@@ -1,0 +1,42 @@
+<style>
+    #ProfilePicture {
+        width: 100%;
+        margin-bottom: 50px;
+    }
+</style>
+
+<div class="row clearfix" [@routerTransition]>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card main-content">
+            <div class="header">
+                <h2>{{ "Tenant" | localize }}</h2>
+                <ul class="header-dropdown m-r--5">
+                    <li>
+                        <button mat-icon-button
+                                [matMenuTriggerFor]="headerMenu"
+                                class="header-dropdown-mat-icon-button">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #headerMenu="matMenu">
+                            <button mat-menu-item (click)="this.load()">
+                                <mat-icon>refresh</mat-icon>
+                                <span>{{ "Refresh" | localize }}</span>
+                            </button>
+                        </mat-menu>
+                    </li>
+                </ul>
+            </div>
+            <div class="body table-responsive">
+                <img id="ProfilePicture" [src]="imgSrc" />
+
+                <button class="action-button" mat-button (click)="updateProfilePicture()">
+                    <mat-icon>edit</mat-icon>
+                    <span>{{ "Edit" | localize }}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

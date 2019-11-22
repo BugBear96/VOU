@@ -1,0 +1,94 @@
+<div class="row clearfix" [@routerTransition]>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card main-content">
+            <div class="header">
+                <h2>{{ "CreateNewVoucherPlatform" | localize }}</h2>
+
+            </div>
+            <div class="body">
+                <form autocomplete="off" #createVoucherPlatformModal="ngForm" (ngSubmit)="save()">
+
+                    <mat-tab-group>
+                        <mat-tab [label]="'VoucherPlatformDetails' | localize">
+                            <br />
+                            <div class="row-fluid">
+                                <div class="col-md-6">
+                                    <mat-form-field>
+                                        <input matInput
+                                                name="PlatformName"
+                                                [placeholder]="'PlatformName' | localize"
+                                                [(ngModel)]="platform.name"
+                                                required
+                                                minlength="2"
+                                                maxlength="32" />
+                                    </mat-form-field>
+
+                                    <mat-form-field>
+                                        <input matInput
+                                                name="Description"
+                                                [placeholder]="'Description' | localize"
+                                                [(ngModel)]="platform.description"
+                                                maxlength="32" />
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <input matInput
+                                                name="CashValue"
+                                                [placeholder]="'CashValue' | localize"
+                                                [(ngModel)]="platform.cashValue"
+                                                maxlength="32" />
+                                    </mat-form-field>
+
+                                    <mat-form-field>
+                                        <input matInput
+                                                name="Discount"
+                                                [placeholder]="'Discount' | localize"
+                                                [(ngModel)]="platform.discount"
+                                                maxlength="32" />
+                                    </mat-form-field>
+
+                                    <mat-form-field>
+                                        <input matInput
+                                                name="GiftDescription"
+                                                [placeholder]="'GiftDescription' | localize"
+                                                [(ngModel)]="platform.giftDescription"
+                                                maxlength="32" />
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                        </mat-tab>
+                        <mat-tab [label]="'TermAndConditions' | localize">
+                            <br />
+                            <div class="row-fluid">
+                                <ng-template ngFor let-role [ngForOf]="roles">
+                                    <div class="col-sm-6">
+                                        <div class="checkbox-wrapper">
+                                            <mat-checkbox [checked]="isRoleChecked(role.normalizedName)"
+                                                            (change)="onRoleChange(role, $event)">
+                                                {{ role.name }}
+                                            </mat-checkbox>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+                    
+                    <div mat-dialog-actions align="right" style="margin-bottom: 50px;" >
+                        <button mat-button type="button" [disabled]="saving" (click)="this._location.back();">
+                            {{ "Cancel" | localize }}
+                        </button>
+                        <button mat-flat-button
+                                type="submit"
+                                flex="15"
+                                color="primary"
+                                [disabled]="!createVoucherPlatformModal.form.valid || saving">
+                            {{ "Save" | localize }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

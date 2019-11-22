@@ -1,0 +1,17 @@
+
+
+<form class="example-form">
+
+    <input #fileInput type="file" style="margin-bottom: 20px;" (change)="addFile()" />
+
+    <img id="IconPictureResize" style="display: block; margin-top: 20px;" src="" *ngIf="uploadedFile.fileName" />
+
+    <button class="button" mat-raised-button color="primary" (click)="updatePicture()" style="margin-top: 20px;">
+        <mat-icon>add</mat-icon>
+        <span>{{ "UpdatePicture" | localize }}</span>
+    </button>
+
+
+
+</form>
+

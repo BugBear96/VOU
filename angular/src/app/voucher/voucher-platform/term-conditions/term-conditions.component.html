@@ -1,0 +1,37 @@
+<div class="row-fluid">
+    <div class="col-md-12">
+
+        <div class="col align-self-end">
+            <mat-slide-toggle class="right"
+                              [(ngModel)]="arrangeRules"
+                              [ngModelOptions]="{standalone: true}"
+                              [disabled]="this.rules.length < 2">
+               Arrange Term & Conditions
+            </mat-slide-toggle>
+        </div>
+
+
+        <mat-form-field class="chip-list" *ngIf="!arrangeRules" #matInputChips >
+            <mat-chip *ngFor="let rule of rules ; index as i" [selectable]="selectable"
+                      [removable]="removable" (removed)="remove(rule)"  [ngStyle]="i==0 && {'margin-top':'20px'}" >
+                {{rule}}
+                <mat-icon style="margin-left: auto;" matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <mat-chip-list #chipList aria-label="Rules selection">
+
+                <input placeholder="New Rule..."
+                       [matChipInputFor]="chipList"
+                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                       [matChipInputAddOnBlur]="addOnBlur"
+                       (matChipInputTokenEnd)="add($event)">
+            </mat-chip-list>
+        </mat-form-field>
+
+        <div cdkDropList class="cdk-list" (cdkDropListDropped)="drop($event)" *ngIf="arrangeRules" >
+            <mat-chip *ngFor="let rule of rules" cdkDrag>{{rule}}</mat-chip>
+        </div>
+    </div>
+
+</div>
+
+

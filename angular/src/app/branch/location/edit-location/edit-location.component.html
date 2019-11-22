@@ -1,0 +1,80 @@
+<style>
+    .example-chip-list {
+        width: 100%;
+    }
+</style>
+
+<form autocomplete="off" #createForm="ngForm" (ngSubmit)="save()">
+    <h1 mat-dialog-title>{{ "EditNewBranch" | localize }}</h1>
+    <mat-dialog-content>
+        <div class="row-fluid">
+            <div class="col-md-12">
+                <mat-form-field>
+                    <input matInput
+                           name="Name"
+                           [placeholder]="'Name' | localize"
+                           [(ngModel)]="location.name"
+                           required
+                           minlength="2"
+                           maxlength="64" />
+                </mat-form-field>
+
+
+                <mat-form-field>
+                    <textarea matInput
+                              name="Address"
+                              [placeholder]="'Address' | localize"
+                              [(ngModel)]="location.address"
+                              required
+                              minlength="2"
+                              maxlength="256"></textarea>
+                </mat-form-field>
+
+
+                <mat-form-field>
+                    <input matInput
+                           name="Postcode"
+                           [placeholder]="'Postcode' | localize"
+                           [(ngModel)]="location.postcode"
+                           required
+                           minlength="2"
+                           maxlength="64" />
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-select [placeholder]="l('State')" [(ngModel)]="location.state" name="State"
+                                matNativeControl required>
+                        <mat-option (click)="changeCities(state)"
+                                    *ngFor="let state of states"
+                                    [value]="state" selected >
+                            {{state.stateName}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-select [placeholder]="l('City')" [(ngModel)]="location.city" name="City"
+                                matNativeControl required>
+                        <mat-option *ngFor="let city of cities"
+                                    [value]="city" selected >
+                            {{city.cityName}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+            </div>
+        </div>
+    </mat-dialog-content>
+    <div mat-dialog-actions>
+        <button mat-button type="button" [disabled]="saving" (click)="close(false)">
+            {{ "Cancel" | localize }}
+        </button>
+        <button mat-flat-button
+                type="submit"
+                flex="15"
+                color="primary"
+                [disabled]="!createForm.form.valid || saving">
+            {{ "Save" | localize }}
+        </button>
+    </div>
+</form>
