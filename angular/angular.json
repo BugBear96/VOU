@@ -43,7 +43,9 @@
               "src/bsb-theme/css/style.css",
               "src/bsb-theme/css/themes/all-themes.css",
               "src/shared/core.less",
-              "src/assets/plugin/jcrop/jquery.Jcrop.css"
+              "src/assets/plugin/jcrop/jquery.Jcrop.css",
+              "node_modules/ion-rangeslider/css/ion.rangeSlider.css",
+              "node_modules/ion-rangeslider/css/ion.rangeSlider.min.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -82,8 +84,9 @@
               "src/assets/plugin/jcrop/jquery.color.js",
               "src/assets/plugin/jcrop/jquery.Jcrop.js",
               "src/bsb-theme/js/admin.js",
-              "src/bsb-theme/js/demo.js"
-
+              "src/bsb-theme/js/demo.js",
+              "node_modules/ion-rangeslider/js/ion.rangeSlider.js",
+              "node_modules/ion-rangeslider/js/ion.rangeSlider.min.js"
 
             ]
           },

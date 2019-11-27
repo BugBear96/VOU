@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
 //import { finalize } from 'rxjs/operators';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
@@ -17,6 +17,8 @@ import { CreateLocationComponent } from './create-location/create-location.compo
 import { EditLocationComponent } from './edit-location/edit-location.component';
 import { UpdateBranchCoverComponent } from './update-branch-cover/update-branch-cover.component';
 import { AppConsts } from '../../../shared/AppConsts';
+import * as _ from 'lodash';
+import { timeout } from 'rxjs/operators';
 
 @Component({
     //selector: 'app-location',
@@ -32,6 +34,10 @@ import { AppConsts } from '../../../shared/AppConsts';
 })
 export class LocationComponent extends AppComponentBase implements OnInit {
 
+    @ViewChild("locationSelections", { static: true }) locationSelections;
+    //@ViewChild("shoes", { static: true }) shoes;
+    selectedLocation: number[] = [];
+    selected: any;
     keyword = '';
     imgUrl = '';
     locations: LocationListDto[] = [];
@@ -45,19 +51,28 @@ export class LocationComponent extends AppComponentBase implements OnInit {
     }
 
     ngOnInit() {
+        this.locationSelections.selectedOptions._multiple = false;
         this.imgUrl = AppConsts.remoteServiceBaseUrl;
         this.load();
     }
 
     load() {
+
+        this.selected = this.selectedLocation.length > 0 ? this.selectedLocation.pop() : null;
+
         this._branchService
             .getLocations(this.keyword)
             .subscribe((result: ListResultDtoOfLocationListDto) => {
                 this.locations = result.items;
-                //console.dir(this.locations);
+                if (_.isNumber(this.selected)) {
+                    setTimeout(() => {
+                        this.selectedLocation.push(this.selected)
+                    }, 100)
+
+                }
+
             });
     }
-    
 
     create(): void {
         this.showCreateOrEditDialog();

@@ -17,6 +17,9 @@ using VOU.Identity;
 
 using Abp.AspNetCore.SignalR.Hubs;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using NgrokAspNetCore;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace VOU.Web.Host.Startup
 {
@@ -33,6 +36,7 @@ namespace VOU.Web.Host.Startup
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            
             // MVC
             services.AddMvc(
                 options => options.Filters.Add(new CorsAuthorizationFilterFactory(_defaultCorsPolicyName))
@@ -65,6 +69,7 @@ namespace VOU.Web.Host.Startup
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new Info { Title = "VOU API", Version = "v1" });
+                options.SwaggerDoc("v2", new Info { Title = "VOU API", Version = "v2" });
                 options.DocInclusionPredicate((docName, description) => true);
                 
                 // Define the BearerAuth scheme that's in use
@@ -75,6 +80,13 @@ namespace VOU.Web.Host.Startup
                     In = "header",
                     Type = "apiKey"
                 });
+            });
+
+            //services.AddNgrok();
+
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
 
             // Configure Abp and Dependency Injection
@@ -88,6 +100,9 @@ namespace VOU.Web.Host.Startup
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+
+            //app.UseForwardedHeaders();
+
             app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initializes ABP framework.
 
             app.UseCors(_defaultCorsPolicyName); // Enable CORS!
@@ -120,6 +135,7 @@ namespace VOU.Web.Host.Startup
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint(_appConfiguration["App:ServerRootAddress"].EnsureEndsWith('/') + "swagger/v1/swagger.json", "VOU API V1");
+                options.SwaggerEndpoint(_appConfiguration["App:NgrokServerRootAddress"].EnsureEndsWith('/') + "swagger/v2/swagger.json", "VOU API V2");
                 options.IndexStream = () => Assembly.GetExecutingAssembly()
                     .GetManifestResourceStream("VOU.Web.Host.wwwroot.swagger.ui.index.html");
             }); // URL: /swagger

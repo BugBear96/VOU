@@ -1,6 +1,7 @@
 ﻿using Abp.AutoMapper;
 using Abp.Domain.Entities;
 using Abp.Runtime.Validation;
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,6 +22,11 @@ namespace VOU.Branch.Dto
         public StateDto State { get; set; }
 
         public string Remarks { get; set; }
+
+        public long? CoverPictureId { get; set; }
+
+        [IgnoreMap]
+        public TimeTableSettings TimeTableJson { get; set; }
 
         //public List<BranchWithVoucherPlatform> VoucherPlatforms { get; set; }
 

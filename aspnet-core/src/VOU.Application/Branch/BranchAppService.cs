@@ -132,7 +132,11 @@ namespace VOU.Branch
             if (location == null)
                 throw new UserFriendlyException(L("InvalidLocation"));
 
-            return ObjectMapper.Map<LocationEditDto>(location);
+            var dto = ObjectMapper.Map<LocationEditDto>(location);
+            dto.TimeTableJson = location.GetSettings();
+            //var items = ObjectMapper.Map<LocationEditDto>(location)
+
+            return dto;
         }
 
         public async Task<EntityDto> CreateOrUpdateLocation(LocationEditDto input)
@@ -149,7 +153,9 @@ namespace VOU.Branch
             else location = new Location(input.Name);
 
             //location.VoucherPlatforms = new List<BranchWithVoucherPlatform>();
+            location.UpdateName(input.Name);
             location.UpdateAddress(input.Address, input.Postcode);
+            location.UpdateSettings(input.TimeTableJson);
 
             State state = state = await _stateManager.FindAsync(input.State.Id);
             City city = state.Cities.Where(x => x.CityName == input.City.CityName).FirstOrDefault();
@@ -157,6 +163,7 @@ namespace VOU.Branch
             // if state city null
             location.UpdateState(state);
             location.UpdateCity(city);
+
 
             if (!isEdit)
                 await _locationManager.CreateLocationAsync(location);

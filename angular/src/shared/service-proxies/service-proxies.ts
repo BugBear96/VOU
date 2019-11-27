@@ -138,6 +138,224 @@ export class AccountServiceProxy {
         }
         return _observableOf<RegisterOutput>(<any>null);
     }
+
+    /**
+     * @param fcmToken (optional) 
+     * @return Success
+     */
+    getOrUpdateUserInfo(fcmToken: string | null | undefined): Observable<UserDto> {
+        let url_ = this.baseUrl + "/api/services/app/Account/GetOrUpdateUserInfo?";
+        if (fcmToken !== undefined)
+            url_ += "FcmToken=" + encodeURIComponent("" + fcmToken) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetOrUpdateUserInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetOrUpdateUserInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<UserDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<UserDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetOrUpdateUserInfo(response: HttpResponseBase): Observable<UserDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? UserDto.fromJS(resultData200) : new UserDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<UserDto>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    registerUser(input: RegisterUserInput | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Account/RegisterUser";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRegisterUser(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRegisterUser(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processRegisterUser(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    registerPhone(input: RegisterUserInput | null | undefined): Observable<string> {
+        let url_ = this.baseUrl + "/api/services/app/Account/RegisterPhone";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRegisterPhone(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRegisterPhone(<any>response_);
+                } catch (e) {
+                    return <Observable<string>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<string>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processRegisterPhone(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<string>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    verifyPhone(input: RegisterUserInput | null | undefined): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/services/app/Account/VerifyPhone";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processVerifyPhone(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processVerifyPhone(<any>response_);
+                } catch (e) {
+                    return <Observable<boolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<boolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processVerifyPhone(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<boolean>(<any>null);
+    }
 }
 
 @Injectable()
@@ -1054,6 +1272,81 @@ export class PublicClientServiceProxy {
             }));
         }
         return _observableOf<ListResultDtoOfVoucherPlatformListDto>(<any>null);
+    }
+}
+
+@Injectable()
+export class PublicUserServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getPublicUsers(filter: string | null | undefined, sorting: string | null | undefined, skipCount: number | null | undefined, maxResultCount: number | null | undefined): Observable<PagedResultDtoOfUserListDto> {
+        let url_ = this.baseUrl + "/api/services/app/PublicUser/GetPublicUsers?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPublicUsers(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPublicUsers(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfUserListDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfUserListDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetPublicUsers(response: HttpResponseBase): Observable<PagedResultDtoOfUserListDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfUserListDto.fromJS(resultData200) : new PagedResultDtoOfUserListDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfUserListDto>(<any>null);
     }
 }
 
@@ -3476,6 +3769,152 @@ export interface IRegisterOutput {
     canLogin: boolean | undefined;
 }
 
+export class UserDto implements IUserDto {
+    userName: string;
+    name: string;
+    surname: string;
+    emailAddress: string;
+    isActive: boolean | undefined;
+    fullName: string | undefined;
+    lastLoginTime: moment.Moment | undefined;
+    creationTime: moment.Moment | undefined;
+    roleNames: string[] | undefined;
+    id: number | undefined;
+
+    constructor(data?: IUserDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.userName = data["userName"];
+            this.name = data["name"];
+            this.surname = data["surname"];
+            this.emailAddress = data["emailAddress"];
+            this.isActive = data["isActive"];
+            this.fullName = data["fullName"];
+            this.lastLoginTime = data["lastLoginTime"] ? moment(data["lastLoginTime"].toString()) : <any>undefined;
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            if (data["roleNames"] && data["roleNames"].constructor === Array) {
+                this.roleNames = [] as any;
+                for (let item of data["roleNames"])
+                    this.roleNames.push(item);
+            }
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): UserDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userName"] = this.userName;
+        data["name"] = this.name;
+        data["surname"] = this.surname;
+        data["emailAddress"] = this.emailAddress;
+        data["isActive"] = this.isActive;
+        data["fullName"] = this.fullName;
+        data["lastLoginTime"] = this.lastLoginTime ? this.lastLoginTime.toISOString() : <any>undefined;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        if (this.roleNames && this.roleNames.constructor === Array) {
+            data["roleNames"] = [];
+            for (let item of this.roleNames)
+                data["roleNames"].push(item);
+        }
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone(): UserDto {
+        const json = this.toJSON();
+        let result = new UserDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserDto {
+    userName: string;
+    name: string;
+    surname: string;
+    emailAddress: string;
+    isActive: boolean | undefined;
+    fullName: string | undefined;
+    lastLoginTime: moment.Moment | undefined;
+    creationTime: moment.Moment | undefined;
+    roleNames: string[] | undefined;
+    id: number | undefined;
+}
+
+export class RegisterUserInput implements IRegisterUserInput {
+    contactNumber: string | undefined;
+    verificationCode: string | undefined;
+    email: string | undefined;
+    name: string | undefined;
+    password: string | undefined;
+
+    constructor(data?: IRegisterUserInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.contactNumber = data["contactNumber"];
+            this.verificationCode = data["verificationCode"];
+            this.email = data["email"];
+            this.name = data["name"];
+            this.password = data["password"];
+        }
+    }
+
+    static fromJS(data: any): RegisterUserInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterUserInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["contactNumber"] = this.contactNumber;
+        data["verificationCode"] = this.verificationCode;
+        data["email"] = this.email;
+        data["name"] = this.name;
+        data["password"] = this.password;
+        return data; 
+    }
+
+    clone(): RegisterUserInput {
+        const json = this.toJSON();
+        let result = new RegisterUserInput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRegisterUserInput {
+    contactNumber: string | undefined;
+    verificationCode: string | undefined;
+    email: string | undefined;
+    name: string | undefined;
+    password: string | undefined;
+}
+
 export class ListResultDtoOfStateListDto implements IListResultDtoOfStateListDto {
     items: StateListDto[] | undefined;
 
@@ -3962,6 +4401,8 @@ export class LocationEditDto implements ILocationEditDto {
     city: CityDto | undefined;
     state: StateDto | undefined;
     remarks: string | undefined;
+    coverPictureId: number | undefined;
+    timeTableJson: TimeTableSettings | undefined;
     id: number | undefined;
 
     constructor(data?: ILocationEditDto) {
@@ -3981,6 +4422,8 @@ export class LocationEditDto implements ILocationEditDto {
             this.city = data["city"] ? CityDto.fromJS(data["city"]) : <any>undefined;
             this.state = data["state"] ? StateDto.fromJS(data["state"]) : <any>undefined;
             this.remarks = data["remarks"];
+            this.coverPictureId = data["coverPictureId"];
+            this.timeTableJson = data["timeTableJson"] ? TimeTableSettings.fromJS(data["timeTableJson"]) : <any>undefined;
             this.id = data["id"];
         }
     }
@@ -4000,6 +4443,8 @@ export class LocationEditDto implements ILocationEditDto {
         data["city"] = this.city ? this.city.toJSON() : <any>undefined;
         data["state"] = this.state ? this.state.toJSON() : <any>undefined;
         data["remarks"] = this.remarks;
+        data["coverPictureId"] = this.coverPictureId;
+        data["timeTableJson"] = this.timeTableJson ? this.timeTableJson.toJSON() : <any>undefined;
         data["id"] = this.id;
         return data; 
     }
@@ -4019,7 +4464,170 @@ export interface ILocationEditDto {
     city: CityDto | undefined;
     state: StateDto | undefined;
     remarks: string | undefined;
+    coverPictureId: number | undefined;
+    timeTableJson: TimeTableSettings | undefined;
     id: number | undefined;
+}
+
+export class TimeTableSettings implements ITimeTableSettings {
+    timeTables: TimeTable[] | undefined;
+
+    constructor(data?: ITimeTableSettings) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (data["timeTables"] && data["timeTables"].constructor === Array) {
+                this.timeTables = [] as any;
+                for (let item of data["timeTables"])
+                    this.timeTables.push(TimeTable.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): TimeTableSettings {
+        data = typeof data === 'object' ? data : {};
+        let result = new TimeTableSettings();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (this.timeTables && this.timeTables.constructor === Array) {
+            data["timeTables"] = [];
+            for (let item of this.timeTables)
+                data["timeTables"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): TimeTableSettings {
+        const json = this.toJSON();
+        let result = new TimeTableSettings();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ITimeTableSettings {
+    timeTables: TimeTable[] | undefined;
+}
+
+export class TimeTable implements ITimeTable {
+    days: Days[] | undefined;
+    workingHours: WorkingHourSettings[] | undefined;
+
+    constructor(data?: ITimeTable) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (data["days"] && data["days"].constructor === Array) {
+                this.days = [] as any;
+                for (let item of data["days"])
+                    this.days.push(item);
+            }
+            if (data["workingHours"] && data["workingHours"].constructor === Array) {
+                this.workingHours = [] as any;
+                for (let item of data["workingHours"])
+                    this.workingHours.push(WorkingHourSettings.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): TimeTable {
+        data = typeof data === 'object' ? data : {};
+        let result = new TimeTable();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (this.days && this.days.constructor === Array) {
+            data["days"] = [];
+            for (let item of this.days)
+                data["days"].push(item);
+        }
+        if (this.workingHours && this.workingHours.constructor === Array) {
+            data["workingHours"] = [];
+            for (let item of this.workingHours)
+                data["workingHours"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): TimeTable {
+        const json = this.toJSON();
+        let result = new TimeTable();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ITimeTable {
+    days: Days[] | undefined;
+    workingHours: WorkingHourSettings[] | undefined;
+}
+
+export class WorkingHourSettings implements IWorkingHourSettings {
+    begin: number | undefined;
+    end: number | undefined;
+
+    constructor(data?: IWorkingHourSettings) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.begin = data["begin"];
+            this.end = data["end"];
+        }
+    }
+
+    static fromJS(data: any): WorkingHourSettings {
+        data = typeof data === 'object' ? data : {};
+        let result = new WorkingHourSettings();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["begin"] = this.begin;
+        data["end"] = this.end;
+        return data; 
+    }
+
+    clone(): WorkingHourSettings {
+        const json = this.toJSON();
+        let result = new WorkingHourSettings();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IWorkingHourSettings {
+    begin: number | undefined;
+    end: number | undefined;
 }
 
 export class BranchWithVoucherPlatformEditDto implements IBranchWithVoucherPlatformEditDto {
@@ -4928,6 +5536,199 @@ export class ListResultDtoOfVoucherPlatformListDto implements IListResultDtoOfVo
 
 export interface IListResultDtoOfVoucherPlatformListDto {
     items: VoucherPlatformListDto[] | undefined;
+}
+
+export class PagedResultDtoOfUserListDto implements IPagedResultDtoOfUserListDto {
+    totalCount: number | undefined;
+    items: UserListDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfUserListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [] as any;
+                for (let item of data["items"])
+                    this.items.push(UserListDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfUserListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfUserListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): PagedResultDtoOfUserListDto {
+        const json = this.toJSON();
+        let result = new PagedResultDtoOfUserListDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPagedResultDtoOfUserListDto {
+    totalCount: number | undefined;
+    items: UserListDto[] | undefined;
+}
+
+export class UserListDto implements IUserListDto {
+    name: string | undefined;
+    surname: string | undefined;
+    userName: string | undefined;
+    emailAddress: string | undefined;
+    profilePictureId: string | undefined;
+    isEmailConfirmed: boolean | undefined;
+    lastLoginTime: moment.Moment | undefined;
+    isActive: boolean | undefined;
+    creationTime: moment.Moment | undefined;
+    roles: UserRoleDto[] | undefined;
+    id: number | undefined;
+
+    constructor(data?: IUserListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.name = data["name"];
+            this.surname = data["surname"];
+            this.userName = data["userName"];
+            this.emailAddress = data["emailAddress"];
+            this.profilePictureId = data["profilePictureId"];
+            this.isEmailConfirmed = data["isEmailConfirmed"];
+            this.lastLoginTime = data["lastLoginTime"] ? moment(data["lastLoginTime"].toString()) : <any>undefined;
+            this.isActive = data["isActive"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            if (data["roles"] && data["roles"].constructor === Array) {
+                this.roles = [] as any;
+                for (let item of data["roles"])
+                    this.roles.push(UserRoleDto.fromJS(item));
+            }
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): UserListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["surname"] = this.surname;
+        data["userName"] = this.userName;
+        data["emailAddress"] = this.emailAddress;
+        data["profilePictureId"] = this.profilePictureId;
+        data["isEmailConfirmed"] = this.isEmailConfirmed;
+        data["lastLoginTime"] = this.lastLoginTime ? this.lastLoginTime.toISOString() : <any>undefined;
+        data["isActive"] = this.isActive;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        if (this.roles && this.roles.constructor === Array) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item.toJSON());
+        }
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone(): UserListDto {
+        const json = this.toJSON();
+        let result = new UserListDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserListDto {
+    name: string | undefined;
+    surname: string | undefined;
+    userName: string | undefined;
+    emailAddress: string | undefined;
+    profilePictureId: string | undefined;
+    isEmailConfirmed: boolean | undefined;
+    lastLoginTime: moment.Moment | undefined;
+    isActive: boolean | undefined;
+    creationTime: moment.Moment | undefined;
+    roles: UserRoleDto[] | undefined;
+    id: number | undefined;
+}
+
+export class UserRoleDto implements IUserRoleDto {
+    roleId: number | undefined;
+    roleName: string | undefined;
+
+    constructor(data?: IUserRoleDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.roleId = data["roleId"];
+            this.roleName = data["roleName"];
+        }
+    }
+
+    static fromJS(data: any): UserRoleDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserRoleDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["roleId"] = this.roleId;
+        data["roleName"] = this.roleName;
+        return data; 
+    }
+
+    clone(): UserRoleDto {
+        const json = this.toJSON();
+        let result = new UserRoleDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserRoleDto {
+    roleId: number | undefined;
+    roleName: string | undefined;
 }
 
 export class CreateRoleDto implements ICreateRoleDto {
@@ -6215,6 +7016,9 @@ export interface IEdition {
 }
 
 export class User implements IUser {
+    profilePictureId: number | undefined;
+    userType: UserType | undefined;
+    fcmToken: string | undefined;
     normalizedUserName: string;
     normalizedEmailAddress: string;
     concurrencyStamp: string | undefined;
@@ -6266,6 +7070,9 @@ export class User implements IUser {
 
     init(data?: any) {
         if (data) {
+            this.profilePictureId = data["profilePictureId"];
+            this.userType = data["userType"];
+            this.fcmToken = data["fcmToken"];
             this.normalizedUserName = data["normalizedUserName"];
             this.normalizedEmailAddress = data["normalizedEmailAddress"];
             this.concurrencyStamp = data["concurrencyStamp"];
@@ -6341,6 +7148,9 @@ export class User implements IUser {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["profilePictureId"] = this.profilePictureId;
+        data["userType"] = this.userType;
+        data["fcmToken"] = this.fcmToken;
         data["normalizedUserName"] = this.normalizedUserName;
         data["normalizedEmailAddress"] = this.normalizedEmailAddress;
         data["concurrencyStamp"] = this.concurrencyStamp;
@@ -6416,6 +7226,9 @@ export class User implements IUser {
 }
 
 export interface IUser {
+    profilePictureId: number | undefined;
+    userType: UserType | undefined;
+    fcmToken: string | undefined;
     normalizedUserName: string;
     normalizedEmailAddress: string;
     concurrencyStamp: string | undefined;
@@ -7889,93 +8702,6 @@ export interface ICreateUserDto {
     password: string;
 }
 
-export class UserDto implements IUserDto {
-    userName: string;
-    name: string;
-    surname: string;
-    emailAddress: string;
-    isActive: boolean | undefined;
-    fullName: string | undefined;
-    lastLoginTime: moment.Moment | undefined;
-    creationTime: moment.Moment | undefined;
-    roleNames: string[] | undefined;
-    id: number | undefined;
-
-    constructor(data?: IUserDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.userName = data["userName"];
-            this.name = data["name"];
-            this.surname = data["surname"];
-            this.emailAddress = data["emailAddress"];
-            this.isActive = data["isActive"];
-            this.fullName = data["fullName"];
-            this.lastLoginTime = data["lastLoginTime"] ? moment(data["lastLoginTime"].toString()) : <any>undefined;
-            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
-            if (data["roleNames"] && data["roleNames"].constructor === Array) {
-                this.roleNames = [] as any;
-                for (let item of data["roleNames"])
-                    this.roleNames.push(item);
-            }
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): UserDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["userName"] = this.userName;
-        data["name"] = this.name;
-        data["surname"] = this.surname;
-        data["emailAddress"] = this.emailAddress;
-        data["isActive"] = this.isActive;
-        data["fullName"] = this.fullName;
-        data["lastLoginTime"] = this.lastLoginTime ? this.lastLoginTime.toISOString() : <any>undefined;
-        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
-        if (this.roleNames && this.roleNames.constructor === Array) {
-            data["roleNames"] = [];
-            for (let item of this.roleNames)
-                data["roleNames"].push(item);
-        }
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone(): UserDto {
-        const json = this.toJSON();
-        let result = new UserDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IUserDto {
-    userName: string;
-    name: string;
-    surname: string;
-    emailAddress: string;
-    isActive: boolean | undefined;
-    fullName: string | undefined;
-    lastLoginTime: moment.Moment | undefined;
-    creationTime: moment.Moment | undefined;
-    roleNames: string[] | undefined;
-    id: number | undefined;
-}
-
 export class ListResultDtoOfRoleDto implements IListResultDtoOfRoleDto {
     items: RoleDto[] | undefined;
 
@@ -8402,6 +9128,21 @@ export enum IsTenantAvailableOutputState {
     _3 = 3, 
 }
 
+export enum Days {
+    _0 = 0, 
+    _1 = 1, 
+    _2 = 2, 
+    _3 = 3, 
+    _4 = 4, 
+    _5 = 5, 
+    _6 = 6, 
+}
+
+export enum UserType {
+    _0 = 0, 
+    _1 = 1, 
+}
+
 export enum HttpResponseMessageStatusCode {
     _100 = 100, 
     _101 = 101, 
@@ -8418,12 +9159,15 @@ export enum HttpResponseMessageStatusCode {
     _208 = 208, 
     _226 = 226, 
     _300 = 300, 
+
     _301 = 301, 
-    _302 = 302,  
+    _302 = 302, 
+
     _303 = 303, 
     _304 = 304, 
     _305 = 305, 
     _306 = 306, 
+ 
     _307 = 307, 
     _308 = 308, 
     _400 = 400, 

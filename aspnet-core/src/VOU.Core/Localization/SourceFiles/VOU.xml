@@ -143,6 +143,7 @@
     <text name="EndDate" value="End Date" />
 
     <text name="InvalidUser" value="Invalid User" />
+    <text name="TimeTables" value="Time Tables" />
   
   </texts>
 </localizationDictionary>

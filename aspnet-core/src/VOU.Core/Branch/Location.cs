@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -50,6 +51,8 @@ namespace VOU.Branch
 
         public virtual string Remarks { get; set; }
 
+        public virtual string TimeTableJson { get; set; }
+
         //public virtual DbGeography Coordinate { get; set; }
 
         //public List<BranchWithVoucherPlatform> VoucherPlatforms { get; set; }
@@ -57,6 +60,13 @@ namespace VOU.Branch
         public DateTime CreationTime { get; set; }
         public DateTime? LastModificationTime { get; set; }
 
+        public void UpdateName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Name is required", nameof(name));
+
+            Name = name;
+        }
 
         public void UpdateAddress(string address, string postcode)
         {
@@ -78,6 +88,24 @@ namespace VOU.Branch
         {
             CoverPictureId = id;
         }
+
+        public TimeTableSettings GetSettings()
+        {
+            if (TimeTableJson == null)
+                return new TimeTableSettings();
+
+            return JsonConvert.DeserializeObject<TimeTableSettings>(TimeTableJson);
+        }
+
+        public void UpdateSettings(TimeTableSettings settings)
+        {
+
+            if (settings == null)
+                throw new ArgumentNullException(nameof(settings));
+
+            TimeTableJson = JsonConvert.SerializeObject(settings);
+        }
+
         /*
         public void AddVoucherPlatform(
             BranchWithVoucherPlatform platform)

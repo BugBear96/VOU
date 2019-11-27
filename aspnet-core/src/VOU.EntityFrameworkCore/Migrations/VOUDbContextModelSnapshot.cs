@@ -1160,6 +1160,8 @@ namespace VOU.Migrations
 
                     b.Property<int>("TenantId");
 
+                    b.Property<string>("TimeTableJson");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");

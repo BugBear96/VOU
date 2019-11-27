@@ -23,6 +23,9 @@ import { SideBarUserAreaComponent } from '@app/layout/sidebar-user-area.componen
 import { SideBarNavComponent } from '@app/layout/sidebar-nav.component';
 import { SideBarFooterComponent } from '@app/layout/sidebar-footer.component';
 import { RightSideBarComponent } from '@app/layout/right-sidebar.component';
+
+import { IonRangeSliderModule } from "ng2-ion-range-slider";
+
 // tenants
 import { TenantsComponent } from '@app/tenants/tenants.component';
 import { CreateTenantDialogComponent } from './tenants/create-tenant/create-tenant-dialog.component';
@@ -63,6 +66,7 @@ import { UpdateProfileComponent } from './tenant-profile/update-profile/update-p
 import { UpdateBannerComponent } from './voucher/voucher-platform/update-banner/update-banner.component';
 import { TermConditionsComponent } from './voucher/voucher-platform/term-conditions/term-conditions.component';
 import { UpdateBranchCoverComponent } from './branch/location/update-branch-cover/update-branch-cover.component';
+import { LocationDetailsComponent } from './/branch/location/location-details/location-details.component';
 
 @NgModule({
   declarations: [
@@ -105,10 +109,12 @@ import { UpdateBranchCoverComponent } from './branch/location/update-branch-cove
         CreateLocationComponent,
         EditLocationComponent,
         UpdateBranchCoverComponent,
+        LocationDetailsComponent,
 
         // voucher platforms
         VoucherPlatformComponent,
         EditVoucherPlatformComponent,
+        TermConditionsComponent,
         //AddVoucherPlatformComponent,
         UpdateBannerComponent,
 
@@ -121,9 +127,7 @@ import { UpdateBranchCoverComponent } from './branch/location/update-branch-cove
         // tenant personal
         TenantProfileComponent,
         UpdateProfileComponent,
-        TermConditionsComponent,
         
-
   ],
   imports: [
     CommonModule,
@@ -136,7 +140,8 @@ import { UpdateBranchCoverComponent } from './branch/location/update-branch-cove
     AppRoutingModule,
     ServiceProxyModule,
     SharedModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    IonRangeSliderModule
   ],
   providers: [],
   entryComponents: [

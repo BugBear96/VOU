@@ -37,39 +37,28 @@ namespace VOU.Web.Host.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
-            try
+            var fnm = $"tenantProfilePicture_{Guid.NewGuid().ToString("n")}.jpg";
+            var fullPath = Path.Combine(Path.GetTempPath(), fnm);
+
+
+            using (var stream = System.IO.File.Create(fullPath))
             {
-                var fnm = $"tenantProfilePicture_{Guid.NewGuid().ToString("n")}.jpg";
-                var fullPath = Path.Combine(Path.GetTempPath(), fnm);
-
-
-                using (var stream = System.IO.File.Create(fullPath))
-                {
                     
 
-                    await file.CopyToAsync(stream);
+                await file.CopyToAsync(stream);
 
-                    var img = System.Drawing.Image.FromStream(stream);
-                    //img.Save(fullPath, ImageFormat.Jpeg);
-                    return Json(new UploadPictureViewModel
-                    {
-                        Width = img.Width,
-                        Height = img.Height,
-                        FileName = fnm
-                    });
-
-
-                }
-
-            }
-            catch(Exception e)
-            {
+                var img = System.Drawing.Image.FromStream(stream);
+                //img.Save(fullPath, ImageFormat.Jpeg);
                 return Json(new UploadPictureViewModel
                 {
-                    
+                    Width = img.Width,
+                    Height = img.Height,
+                    FileName = fnm
                 });
+
+
             }
-            
+ 
         }
 
         [AllowAnonymous]

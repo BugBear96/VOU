@@ -1,0 +1,202 @@
+
+    <style>
+        .example-chip-list {
+            width: 100%;
+        }
+        .panel {
+            padding: 10px;
+        }
+        .scope-checkbox {
+            margin-right: 10px;
+        }
+    </style>
+
+    <mat-card class="example-card" *ngIf="this.location" >
+        <img mat-card-image src="{{this.imgUrl}}/Branch/GetCoverPictureById?id={{location.coverPictureId ? location.coverPictureId: 0}}" alt="Photo of a Shiba Inu">
+        <div *ngIf="!this.isEdit">
+            <mat-card-content>
+                <mat-card-title>
+                    {{ location.name }}
+                    <button type="button" class="btn btn-xs btn-link ng-scope " style="float: right;" *ngIf="this.permissions['edit']" (click)="edit()">
+                        <i class="fa fa-edit"></i>&nbsp;
+                        Edit
+                    </button>
+                </mat-card-title>
+                <mat-card-subtitle>subtitle</mat-card-subtitle>
+                <p>
+                    {{ location.address }}
+                </p>
+                <p>
+                    {{ location.postcode }}, {{ location.city.cityName }}, {{ location.state.stateName }}
+                </p>
+            </mat-card-content>
+
+            <mat-card class="example-card col-sm-6" *ngFor="let description of timetablesDescription">
+                <mat-card-title>
+                    {{ description.scope.join(', ') }}
+                </mat-card-title>
+                <mat-card-subtitle *ngFor="let detail of description.details" >{{detail}}</mat-card-subtitle>
+            </mat-card>
+
+
+            <mat-card-actions style="margin-bottom: 0px;">
+                <button mat-button (click)="updateCover(location)">{{ "UpdateCoverPicture" | localize }}</button>
+            </mat-card-actions>
+            <mat-card-actions>
+                <button mat-button routerLink="/app/branch/voucher-platform/{{location.id}}">Manage Voucher Platform</button>
+            </mat-card-actions>
+        </div>
+
+        <form autocomplete="off" #createForm="ngForm" (ngSubmit)="save()" *ngIf="this.isEdit">
+            <h1 mat-dialog-title>{{ "EditBranch" | localize }}</h1>
+            <mat-dialog-content>
+                <div class="row-fluid">
+                    <div class="col-md-12">
+                        <mat-form-field>
+                            <input matInput
+                                   name="Name"
+                                   [placeholder]="'Name' | localize"
+                                   [(ngModel)]="location.name"
+                                   required
+                                   minlength="2"
+                                   maxlength="64" />
+                        </mat-form-field>
+
+
+                        <mat-form-field>
+                            <textarea matInput
+                                      name="Address"
+                                      [placeholder]="'Address' | localize"
+                                      [(ngModel)]="location.address"
+                                      required
+                                      minlength="2"
+                                      maxlength="256"></textarea>
+                        </mat-form-field>
+
+
+                        <mat-form-field>
+                            <input matInput
+                                   name="Postcode"
+                                   [placeholder]="'Postcode' | localize"
+                                   [(ngModel)]="location.postcode"
+                                   required
+                                   minlength="2"
+                                   maxlength="64" />
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-select [placeholder]="l('State')" [(ngModel)]="location.state" name="State"
+                                        matNativeControl required>
+                                <mat-option (click)="changeCities(state)"
+                                            *ngFor="let state of states"
+                                            [value]="state" selected>
+                                    {{state.stateName}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-select [placeholder]="l('City')" [(ngModel)]="location.city" name="City"
+                                        matNativeControl required>
+                                <mat-option *ngFor="let city of cities"
+                                            [value]="city" selected>
+                                    {{city.cityName}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <h5>{{ "TimeTables" | localize }}</h5>
+                        <div class="panel panel-default" *ngFor="let item of this.timetablesJson; let x = index">
+                            <div class="row">
+                                <label class="col-sm-2">Scope</label>
+                                <section class="col-sm-9">
+                                    <mat-checkbox [ngModelOptions]="{standalone: true}" class="scope-checkbox" [(ngModel)]="scope.checked" *ngFor="let scope of item.scopes">{{scope.name}}</mat-checkbox>
+                                </section>
+                            </div>
+                            <div class="col-lg-12">
+                                <label class="col-lg-12">Working Hours</label>
+                                <table class="col-lg-12 table table-condensed table-bordered">
+                                    <tbody>
+                                        <tr *ngFor="let hours of item.workingHours; let y = index">
+                                            <td style="width:240px">
+                                                <ion-range-slider #sliderElement
+                                                                  type="double"
+                                                                  min="0"
+                                                                  max="24"
+                                                                  [from]="hours.begin"
+                                                                  from_min="0"
+                                                                  from_max="24"
+                                                                  from_shadow="true"
+                                                                  [to]="hours.end"
+                                                                  to_min="0"
+                                                                  to_max="24"
+                                                                  to_shadow="true"
+                                                                  grid="true"
+                                                                  grid_num="10"
+                                                                  prefix=""
+                                                                  postfix=":00"
+                                                                  decorate_both="false"
+                                                                  (onUpdate)="myOnUpdate($event)"
+                                                                  (onChange)="myOnChange($event)"
+                                                                  (onFinish)="myOnFinish($event, x, y)"></ion-range-slider>
+                                            </td>
+                                            <td>
+                                                <p class="form-control-static">{{getWorkingHourDescription(x,y)}}</p>
+                                            </td>
+                                            <td style="width: 36px;">
+                                                <button class="btn btn-danger btn-outline btn-xs" (click)="removeWorkingHour(x,y)">
+                                                    <span class="fa fa-trash"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4">
+                                                <button type="button" class="btn btn-primary btn-outline btn-xs" (click)="addWorkingHour(item)">
+                                                    <span class="fa fa-plus-circle"></span>&nbsp;
+                                                    Add discount hour settings
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="form-group">
+                                    <button class="btn btn-danger btn-outline"
+                                            (click)="removeTimeTable(x)">
+                                        <span class="fa fa-trash"></span>&nbsp;
+                                        Remove this rule set
+                                    </button>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary btn-outline" (click)="addTimeTable()">
+                                <span class="fa fa-plus-circle"></span>&nbsp;
+                                Add new rule set
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </mat-dialog-content>
+            <div mat-dialog-actions>
+                <button mat-button type="button" [disabled]="saving" (click)="cancel()">
+                    {{ "Cancel" | localize }}
+                </button>
+                <button mat-flat-button
+                        type="submit"
+                        flex="15"
+                        color="primary"
+                        [disabled]="!createForm.form.valid || saving">
+                    {{ "Save" | localize }}
+                </button>
+            </div>
+        </form>
+
+    </mat-card>
+
+
+
+
